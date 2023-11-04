@@ -6,15 +6,15 @@ def is_valid_sample(sample_quality):
     and, False if it is not.
     """
 
-    # if sample_quality > .9:
-    #     return True
-    # else:
-    #     return False
-
-    if sample_quality >= .95:
+    if sample_quality > .9:
         return True
     else:
         return False
+
+    # if sample_quality >= .95:
+    #     return True
+    # else:
+    #     return False
 
 
 def is_valid_calibration(calibration_time):
@@ -34,13 +34,18 @@ def is_valid_calibration(calibration_time):
 def main():
     total_tests = 0
     positive_tests = 0
+    negative_tests = 0
 
     while True:
         demographics = []
         race_factor = input("Enter race: ")
         gender_factor = input("Enter gender: ")
         income_factor = input("Enter income: ")
-        demographic_data = {"race": race_factor, "gender": gender_factor, "income": income_factor}
+        demographic_data = {
+            "race": race_factor,
+            "gender": gender_factor,
+            "income": income_factor
+        }
         demographics.append(demographic_data)
 
         answer = input("Test positive? [y,n or stop]: ")
@@ -53,16 +58,25 @@ def main():
         q = float(input("Sample quality: "))
         t = int(input("Hours since last calibration: "))  # changed this from MINUTES to HOURS
 
+        if not is_valid_sample(q) or not is_valid_calibration(t):
+            print()
+            print("Error: invalid sample quality or calibration time.")
+            print("Total tests: ", total_tests)
+            print("Positive: ", positive_tests)
+            print("Negative: ", negative_tests)
+            print(demographics)
+            return
+
         if is_valid_sample(q) and is_valid_calibration(t):  # changed this from or to and
             positive_tests += 1
-
-        if (is_valid_sample(q) or is_valid_calibration(t)) == False:
-            continue
+        else:
+            negative_tests += 1
 
     print()
     print("Total tests: ", total_tests)
     print("Positive: ", positive_tests)
-    print("Negative: ", total_tests - positive_tests)
+    print("Negative: ", negative_tests)
+    print(demographics)
 
 
 main()
